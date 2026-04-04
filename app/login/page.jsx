@@ -1,10 +1,11 @@
 'use client';
 import { useState } from 'react';
-
+import { useRouter } from 'next/navigation';
 const LoginForm = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(''); // Для вывода ошибок
+  const router = useRouter(); // 2. Инициализируем роутер
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,7 +32,7 @@ const LoginForm = () => {
       // Сохраняем токен (localStorage — самый простой вариант для начала)
       localStorage.setItem('jwt_token', token);
       
-      console.log('Успешный вход! Токен сохранен.');
+      router.push('/notes');
       // Здесь можно сделать редирект, например: window.location.href = '/dashboard';
       
     } catch (err) {
