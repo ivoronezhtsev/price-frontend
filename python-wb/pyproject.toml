@@ -1,0 +1,13 @@
+[project]
+name = "python-wb"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "httpx>=0.28.1",
+    "playwright>=1.58.0",
+]
+[tool.ruff]
+# Включаем проверку именований (N - pep8-naming)
+select = ["E", "F", "N"]

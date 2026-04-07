@@ -19,12 +19,12 @@ def save_to_json(data: list, filename: str = "wb_purchases.json"):
     try:
         with open(filename, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=4)
-        print(f"\n[OK] Данные сохранены в {filename} (всего: {len(data)})")
+        print(f"[OK] Данные сохранены в {filename} (всего: {len(data)})")
     except Exception as e:
         print(f"[ERROR] Ошибка записи: {e}")
 
 async def push_to_backend(data: list):
-    url = "http://localhost:8080/api/purchases/wb"
+    url = "http://localhost:8080/api/wb-purchases"
     async with httpx.AsyncClient() as client:
         try:
             response = await client.post(url, json=data, timeout=10.0)
@@ -35,14 +35,15 @@ async def push_to_backend(data: list):
         except Exception as e:
             print(f"[PUSH] Не удалось связаться с бэкендом: {e}")
 
+
 async def get_wb_purchases():
     async with async_playwright() as p:
-        CHROME_PATH = "/usr/bin/google-chrome"
+        chrome_path = r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
 
         context = await p.chromium.launch_persistent_context(
             USER_DATA_DIR,
-            executable_path=CHROME_PATH,
-            headless=True,
+            executable_path=chrome_path,
+            headless=False,
             args=["--disable-blink-features=AutomationControlled"],
         )
         page = await context.new_page()
@@ -81,7 +82,8 @@ async def get_wb_purchases():
                 )
 
             # Сохраняем один раз в конце
-            push_to_backend(items_data)
+            await push_to_backend(items_data)
+            save_to_json(items_data)
 
         except Exception as e:
             await page.screenshot(path="debug_error.png")
