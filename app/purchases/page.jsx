@@ -5,7 +5,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-
+import Image from 'next/image'
 export default function WBGrid() {
   const [purchases, setPurchases] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -50,9 +50,12 @@ export default function WBGrid() {
         {purchases.map((item, index) => (
           <Card key={index} className="overflow-hidden border-none shadow-sm hover:shadow-md transition-shadow bg-white">
             <AspectRatio ratio={3 / 4} className="bg-slate-100">
-              <img
+              <Image
                 src={item.image_url}
                 alt={item.brand}
+                fill
+                priority={index < 10} 
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" 
                 className="object-cover w-full h-full hover:scale-105 transition-transform duration-500"
               />
               {/* Если в JSON нет артикула, можно выводить дату получения */}
