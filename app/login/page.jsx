@@ -32,7 +32,7 @@ const LoginForm = () => {
       // Сохраняем токен (localStorage — самый простой вариант для начала)
       localStorage.setItem('jwt_token', token);
       
-      router.push('/notes');
+      router.push('/purchases');
       // Здесь можно сделать редирект, например: window.location.href = '/dashboard';
       
     } catch (err) {

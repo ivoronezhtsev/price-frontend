@@ -24,7 +24,7 @@ def save_to_json(data: list, filename: str = "wb_purchases.json"):
         print(f"[ERROR] Ошибка записи: {e}")
 
 async def push_to_backend(data: list):
-    url = "http://localhost:8080/api/wb-purchases"
+    url = "http://localhost:8080/wb-purchases"
     async with httpx.AsyncClient() as client:
         try:
             response = await client.post(url, json=data, timeout=10.0)
@@ -71,6 +71,16 @@ async def get_wb_purchases():
                 raw_price = await price_el.inner_text() if price_el else ""
                 raw_date = await date_el.inner_text() if date_el else ""
 
+                img_el = await item.query_selector("img")
+    
+                # Извлекаем атрибут src (или data-src-pb, если src еще не заполнен)
+                img_url = None
+                if img_el:
+                    img_url = await img_el.get_attribute("src")
+                    # Если src пустой или содержит base64 заглушку, берем из data-src-pb
+                    if not img_url or "data:image" in img_url:
+                        img_url = await img_el.get_attribute("data-src-pb")
+
                 items_data.append(
                     {
                         "brand": (await brand_el.inner_text()).strip()
@@ -78,6 +88,7 @@ async def get_wb_purchases():
                         else "null",
                         "price": clean_wb_price(raw_price),
                         "receive_date": raw_date,
+                        "image_url": img_url
                     }
                 )
 
