@@ -38,8 +38,7 @@ async def push_to_backend(data: list):
 
 async def get_wb_purchases():
     async with async_playwright() as p:
-        chrome_path = r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
-
+        chrome_path = "/usr/bin/google-chrome"
         context = await p.chromium.launch_persistent_context(
             USER_DATA_DIR,
             executable_path=chrome_path,
@@ -54,12 +53,12 @@ async def get_wb_purchases():
         try:
             # Ждем появления хотя бы одного айтема 30 секунд
             print("Ожидаю загрузки товаров (30 сек)...")
-            await page.wait_for_selector(".archive-page__item", timeout=30000)
+            await page.wait_for_selector(".archivePageItem--PYg9z", timeout=30000)
 
             # Небольшая пауза для финализации рендеринга (на 500мбит хватит и 1 сек)
             await page.wait_for_timeout(1500)
 
-            items = await page.query_selector_all(".archive-page__item")
+            items = await page.query_selector_all(".archivePageItem--PYg9z")
             print(f"Вижу элементов на странице: {len(items)}")
 
             items_data = []
