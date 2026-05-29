@@ -38,7 +38,7 @@ async def push_to_backend(data: list):
 
 async def get_wb_purchases():
     async with async_playwright() as p:
-        chrome_path = "/usr/bin/google-chrome"
+        chrome_path = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
         context = await p.chromium.launch_persistent_context(
             USER_DATA_DIR,
             executable_path=chrome_path,
